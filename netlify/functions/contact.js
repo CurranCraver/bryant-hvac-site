@@ -20,26 +20,26 @@ export const handler = async (event) => {
     };
   }
 
-  // 1. Create contact in GHL
+  // 1. Create contact in GHL (v2 API)
   try {
-    const ghlRes = await fetch('https://rest.gohighlevel.com/v1/contacts/', {
+    const nameParts = name.split(' ');
+    const firstName = nameParts[0];
+    const lastName = nameParts.slice(1).join(' ') || '';
+    const ghlRes = await fetch('https://services.leadconnectorhq.com/contacts/', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${process.env.GHL_API_KEY}`,
         'Content-Type': 'application/json',
+        Version: '2021-07-28',
       },
       body: JSON.stringify({
-        name,
+        firstName,
+        lastName,
         phone,
         email,
         locationId: process.env.GHL_LOCATION_ID,
         source: 'Website Form',
         tags: ['website-lead'],
-        customField: {
-          source_page,
-          sms_consent: String(sms_consent),
-          marketing_consent: String(marketing_consent),
-        },
       }),
     });
     if (!ghlRes.ok) {
