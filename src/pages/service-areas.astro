@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import ContactForm from '../components/ContactForm.astro';
+
+const cities = [
+  { name: "Monroe, NC", slug: "hvac-monroe-nc" },
+  { name: "Indian Trail, NC", slug: "hvac-indian-trail-nc" },
+  { name: "Waxhaw, NC", slug: "hvac-waxhaw-nc" },
+];
+---
+<Base
+  title="HVAC Service Areas | Bryant Heating & Cooling"
+  description="Bryant Heating & Cooling serves Monroe, Indian Trail, Waxhaw, Stallings, Matthews, and all of Union County NC. Call (980) 280-7570."
+  canonical="https://bryanthvacpros.com/service-areas"
+>
+  <section style="padding:64px 0;">
+    <div class="inner">
+      <h1 style="font-size:2.8rem; color:var(--navy); margin-bottom:16px;">Service Areas</h1>
+      <p style="font-size:1.1rem; margin-bottom:40px; max-width:640px;">
+        Bryant Heating &amp; Cooling serves Monroe NC and a 50-mile radius — all of Union County, Charlotte metro, and surrounding communities.
+      </p>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:16px;">
+        {cities.map(c => (
+          <a href={`/cities/${c.slug}`}
+             style="background:var(--bg); padding:20px 24px; border-radius:8px; font-weight:700; color:var(--navy); display:block; border:1px solid #e2e8f0; text-decoration:none;">
+            {c.name}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+  <ContactForm />
+</Base>

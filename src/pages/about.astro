@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import TrustBar from '../components/TrustBar.astro';
+import ContactForm from '../components/ContactForm.astro';
+---
+<Base
+  title="About Bryant Heating & Cooling | Monroe NC HVAC"
+  description="Christopher Bryant — Monroe NC native, 10 years HVAC experience, licensed #18740. Honest work, faith-driven service."
+  canonical="https://bryanthvacpros.com/about"
+>
+  <section style="padding:64px 0;">
+    <div class="inner" style="max-width:800px;">
+      <h1 style="font-size:2.8rem; color:var(--navy); margin-bottom:32px;">About Bryant Heating &amp; Cooling</h1>
+      <p style="font-size:1.1rem; line-height:1.8; margin-bottom:24px;">
+        My name is Christopher Bryant. I am Monroe, NC born and raised. I grew up just outside of Monroe in Unionville, where I found a small mom and pop heating air conditioning company that had been around since 1970 and decided to hire me at the age of 16 as an apprentice. I quickly learned the trade, and I have never looked back.
+      </p>
+      <p style="font-size:1.1rem; line-height:1.8; margin-bottom:32px;">
+        This business is about much more than just heating and air... We are a customer service company who happens to sell heating and air. I value getting to know my customers, forming friendships and long-term partnerships, and most importantly sharing my faith in Jesus Christ. I never want to lose sight of the main mission, which is loving God &amp; loving others — this is just my platform to do so.
+      </p>
+      <div style="margin-bottom:32px;"><TrustBar /></div>
+      <h2 style="font-size:1.8rem; color:var(--navy); margin-bottom:16px;">Why Customers Choose Bryant</h2>
+      <ul style="font-size:1.05rem; line-height:2; padding-left:20px;">
+        <li>We answer every call, even on weekends</li>
+        <li>We are honest and don't recommend services you don't need</li>
+        <li>Our price point is on the low end of average compared to competitors</li>
+        <li>2-year labor warranty · 10-year parts warranty</li>
+        <li>Veterans discount 10% · Senior citizens discount 10%</li>
+      </ul>
+    </div>
+  </section>
+  <ContactForm />
+</Base>
