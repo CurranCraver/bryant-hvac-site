@@ -1,0 +1,40 @@
+---
+import Base from './Base.astro';
+import ContactForm from '../components/ContactForm.astro';
+import TrustBar from '../components/TrustBar.astro';
+
+export interface Props {
+  title: string;
+  description: string;
+  canonical: string;
+  city?: string;
+  service?: string;
+  lastmod?: string;
+}
+const { title, description, canonical, city = 'Monroe', service } = Astro.props;
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": service || title,
+  "provider": {
+    "@type": "HVACBusiness",
+    "name": "Bryant Heating & Cooling",
+    "telephone": "(980) 280-7570",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": city,
+      "addressRegion": "NC",
+      "addressCountry": "US"
+    }
+  },
+  "areaServed": `${city}, NC`
+};
+---
+<Base title={title} description={description} canonical={canonical} schema={serviceSchema}>
+  <div class="inner" style="padding-top:32px;"><TrustBar /></div>
+  <article class="inner" style="padding:48px 24px; max-width:860px;">
+    <slot />
+  </article>
+  <ContactForm heading={`Request ${service || 'Service'} in ${city}, NC`} />
+</Base>

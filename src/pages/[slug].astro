@@ -1,0 +1,25 @@
+---
+import { getCollection, render } from 'astro:content';
+import ServicePage from '../layouts/ServicePage.astro';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('pages');
+  return entries.map(entry => ({
+    params: { slug: entry.data.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+<ServicePage
+  title={entry.data.title}
+  description={entry.data.description}
+  canonical={entry.data.canonical}
+  city={entry.data.city}
+  service={entry.data.service}
+  lastmod={entry.data.lastmod}
+>
+  <Content />
+</ServicePage>
