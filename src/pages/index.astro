@@ -6,6 +6,7 @@ import ContactForm from '../components/ContactForm.astro';
   title="Bryant Heating &amp; Cooling | HVAC Monroe NC"
   description="Monroe NC's honest HVAC company. AC repair, furnace service, installation — licensed #18740, 24/7, no diagnostic fee. Call (980) 280-7570."
   canonical="https://bryanthvacpros.com"
+  preloadImage="/images/bryant-hvac-hero.webp"
 >
   <fragment slot="header">
     <nav class="bhc-nav">
@@ -96,7 +97,7 @@ import ContactForm from '../components/ContactForm.astro';
     /* SERVICES */
     .services-bg { background: var(--light-bg); }
     .services-inner { max-width: 1100px; margin: 0 auto; padding: 80px 48px; }
-    .section-label { font-size: 12px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: var(--blue); margin-bottom: 10px; }
+    .section-label { font-size: 12px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #1e5f8c; margin-bottom: 10px; }
     .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(28px, 3.5vw, 40px); font-weight: 800; color: var(--navy); line-height: 1.1; margin-bottom: 40px; }
     .services-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
     .service-card { background: var(--white); border-radius: 6px; padding: 28px 28px 28px 24px; border-left: 4px solid var(--blue); box-shadow: 0 2px 8px rgba(27,58,92,0.07); text-decoration: none; display: block; transition: box-shadow 0.2s, transform 0.15s; }
@@ -108,16 +109,16 @@ import ContactForm from '../components/ContactForm.astro';
     /* WHY BRYANT */
     .why-bg { background: var(--navy); }
     .why-inner { max-width: 1100px; margin: 0 auto; padding: 80px 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
-    .why-text .section-label { color: var(--blue); }
+    .why-text .section-label { color: rgba(255,255,255,0.8); }
     .why-text .section-title { color: var(--white); }
     .why-copy { font-size: 17px; color: rgba(255,255,255,0.80); line-height: 1.75; margin-bottom: 36px; }
     .trust-badges { display: flex; flex-wrap: wrap; gap: 12px; }
     .trust-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 4px; padding: 10px 16px; font-size: 13px; font-weight: 700; color: var(--white); }
     .trust-badge::before { content: ''; display: block; width: 8px; height: 8px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
     .why-visual { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; padding: 40px 32px; text-align: center; }
-    .why-visual-number { font-family: 'Barlow Condensed', sans-serif; font-size: 72px; font-weight: 800; color: var(--red); line-height: 1; }
+    .why-visual-number { font-family: 'Barlow Condensed', sans-serif; font-size: 72px; font-weight: 800; color: #FF3B3B; line-height: 1; }
     .why-visual-label { font-size: 15px; color: rgba(255,255,255,0.65); margin-top: 8px; font-weight: 600; }
-    .why-visual-sub { font-size: 13px; color: rgba(255,255,255,0.4); margin-top: 6px; }
+    .why-visual-sub { font-size: 13px; color: rgba(255,255,255,0.75); margin-top: 6px; }
     @media (max-width: 768px) { .why-inner { grid-template-columns: 1fr; gap: 40px; padding: 56px 20px; } }
 
     /* SERVICE AREAS */
@@ -261,7 +262,7 @@ import ContactForm from '../components/ContactForm.astro';
           </p>
         </div>
         <div>
-          <h4 style="font-size:11px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.40); margin-bottom:16px;">Services</h4>
+          <p style="font-size:11px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.70); margin-bottom:16px;">Services</p>
           <ul style="list-style:none;">
             <li style="margin-bottom:10px;"><a href="/ac-repair-monroe-nc" style="font-size:14px; color:rgba(255,255,255,0.70); text-decoration:none;">AC Repair</a></li>
             <li style="margin-bottom:10px;"><a href="/furnace-repair-monroe-nc" style="font-size:14px; color:rgba(255,255,255,0.70); text-decoration:none;">Heating Repair</a></li>
@@ -270,7 +271,7 @@ import ContactForm from '../components/ContactForm.astro';
           </ul>
         </div>
         <div>
-          <h4 style="font-size:11px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.40); margin-bottom:16px;">Company</h4>
+          <p style="font-size:11px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; color:rgba(255,255,255,0.70); margin-bottom:16px;">Company</p>
           <ul style="list-style:none;">
             <li style="margin-bottom:10px;"><a href="/about" style="font-size:14px; color:rgba(255,255,255,0.70); text-decoration:none;">About Us</a></li>
             <li style="margin-bottom:10px;"><a href="/service-areas" style="font-size:14px; color:rgba(255,255,255,0.70); text-decoration:none;">Service Areas</a></li>
@@ -279,10 +280,10 @@ import ContactForm from '../components/ContactForm.astro';
         </div>
       </div>
       <div style="max-width:1100px; margin:0 auto; padding:20px 48px; border-top:1px solid rgba(255,255,255,0.10); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
-        <p style="font-size:12px; color:rgba(255,255,255,0.35);">© 2026 Bryant Heating &amp; Cooling of the Piedmont, LLC. All rights reserved.</p>
+        <p style="font-size:12px; color:rgba(255,255,255,0.65);">© 2026 Bryant Heating &amp; Cooling of the Piedmont, LLC. All rights reserved.</p>
         <div style="display:flex; gap:20px;">
-          <a href="/privacy-policy" style="font-size:12px; color:rgba(255,255,255,0.45); text-decoration:none;">Privacy Policy</a>
-          <a href="/terms-of-service" style="font-size:12px; color:rgba(255,255,255,0.45); text-decoration:none;">Terms of Service</a>
+          <a href="/privacy-policy" style="font-size:12px; color:rgba(255,255,255,0.75); text-decoration:none;">Privacy Policy</a>
+          <a href="/terms-of-service" style="font-size:12px; color:rgba(255,255,255,0.75); text-decoration:none;">Terms of Service</a>
         </div>
       </div>
     </footer>

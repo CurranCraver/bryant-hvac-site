@@ -4,8 +4,9 @@ export interface Props {
   description: string;
   canonical: string;
   schema?: object;
+  preloadImage?: string;
 }
-const { title, description, canonical, schema } = Astro.props;
+const { title, description, canonical, schema, preloadImage } = Astro.props;
 
 const localBusinessSchema = {
   "@context": "https://schema.org",
@@ -44,7 +45,10 @@ const localBusinessSchema = {
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;600;700&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;600;700&display=swap" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;600;700&display=swap" /></noscript>
+  {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
   <script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)} />
   {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
   <style is:global>
