@@ -6,6 +6,9 @@ const cities = [
   { name: "Monroe, NC", slug: "hvac-monroe-nc" },
   { name: "Indian Trail, NC", slug: "hvac-indian-trail-nc" },
   { name: "Waxhaw, NC", slug: "hvac-waxhaw-nc" },
+  { name: "Stallings, NC", slug: "hvac-stallings-nc" },
+  { name: "Matthews, NC", slug: "hvac-matthews-nc" },
+  { name: "Mint Hill, NC", slug: "hvac-mint-hill-nc" },
 ];
 ---
 <Base
@@ -13,6 +16,47 @@ const cities = [
   description="Bryant Heating & Cooling serves Monroe, Indian Trail, Waxhaw, Stallings, Matthews, and all of Union County NC. Call (980) 280-7570."
   canonical="https://bryanthvacpros.com/service-areas"
 >
+<style>
+  .photo-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    height: 260px;
+    overflow: hidden;
+  }
+  .strip-img {
+    position: relative;
+    overflow: hidden;
+  }
+  .strip-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  .strip-img:hover img { transform: scale(1.07); }
+  .strip-caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(27,58,92,0.88) 0%, transparent 70%);
+    padding: 24px 16px 14px;
+    font-family: var(--font-heading);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  @media (max-width: 640px) {
+    .photo-strip { height: 180px; }
+    .strip-caption { font-size: 0.75rem; padding: 16px 10px 10px; }
+  }
+  @media (max-width: 520px) {
+    .photo-strip { grid-template-columns: 1fr; height: auto; }
+    .strip-img { height: 200px; }
+  }
+</style>
+
   <section style="padding:64px 0;">
     <div class="inner">
       <h1 style="font-size:2.8rem; color:var(--navy); margin-bottom:16px;">Service Areas</h1>
@@ -29,5 +73,22 @@ const cities = [
       </div>
     </div>
   </section>
+
+  <!-- PHOTO STRIP -->
+  <div class="photo-strip">
+    <div class="strip-img">
+      <img src="/images/bryant-real-14.jpg" alt="Christopher and Matthew — the Bryant Heating and Cooling team" loading="lazy" style="object-position: 50% 52%;" onerror="this.src='/images/bryant-hvac-hero.webp'" />
+      <div class="strip-caption">The Bryant Team</div>
+    </div>
+    <div class="strip-img">
+      <img src="/images/bryant-real-04.jpg" alt="Bryant HVAC fully equipped service fleet" loading="lazy" style="object-position: 50% 65%;" onerror="this.src='/images/bryant-hvac-hero.webp'" />
+      <div class="strip-caption">Fully Equipped Fleet</div>
+    </div>
+    <div class="strip-img">
+      <img src="/images/bryant-real-07.jpg" alt="Bryant HVAC technician ready for any job in Union County" loading="lazy" style="object-position: 50% 12%;" onerror="this.src='/images/bryant-hvac-hero.webp'" />
+      <div class="strip-caption">Ready for Any Job</div>
+    </div>
+  </div>
+
   <ContactForm />
 </Base>

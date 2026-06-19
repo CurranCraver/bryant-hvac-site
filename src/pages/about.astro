@@ -8,6 +8,48 @@ import ContactForm from '../components/ContactForm.astro';
   description="Christopher Bryant — Monroe NC native, 10 years HVAC experience, licensed #18740. Honest work, faith-driven service."
   canonical="https://bryanthvacpros.com/about"
 >
+
+<style>
+  .photo-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    height: 260px;
+    overflow: hidden;
+  }
+  .strip-img {
+    position: relative;
+    overflow: hidden;
+  }
+  .strip-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  .strip-img:hover img { transform: scale(1.07); }
+  .strip-caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(27,58,92,0.88) 0%, transparent 70%);
+    padding: 24px 16px 14px;
+    font-family: var(--font-heading);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  @media (max-width: 640px) {
+    .photo-strip { height: 180px; }
+    .strip-caption { font-size: 0.75rem; padding: 16px 10px 10px; }
+  }
+  @media (max-width: 520px) {
+    .photo-strip { grid-template-columns: 1fr; height: auto; }
+    .strip-img { height: 200px; }
+  }
+</style>
+
   <section style="padding:64px 0;">
     <div class="inner" style="max-width:800px;">
       <h1 style="font-size:2.8rem; color:var(--navy); margin-bottom:32px;">About Bryant Heating &amp; Cooling</h1>
@@ -17,6 +59,27 @@ import ContactForm from '../components/ContactForm.astro';
       <p style="font-size:1.1rem; line-height:1.8; margin-bottom:32px;">
         This business is about much more than just heating and air... We are a customer service company who happens to sell heating and air. I value getting to know my customers, forming friendships and long-term partnerships, and most importantly sharing my faith in Jesus Christ. I never want to lose sight of the main mission, which is loving God &amp; loving others — this is just my platform to do so.
       </p>
+    </div>
+  </section>
+
+  <!-- PHOTO STRIP -->
+  <div class="photo-strip">
+    <div class="strip-img">
+      <img src="/images/bryant-real-14.jpg" alt="Christopher and Matthew — the Bryant Heating and Cooling team" loading="lazy" style="object-position: 50% 52%;" onerror="this.src='/images/bryant-hvac-hero.webp'" />
+      <div class="strip-caption">The Bryant Team</div>
+    </div>
+    <div class="strip-img">
+      <img src="/images/bryant-real-04.jpg" alt="Bryant HVAC fully equipped service fleet" loading="lazy" style="object-position: 50% 65%;" onerror="this.src='/images/bryant-hvac-hero.webp'" />
+      <div class="strip-caption">Fully Equipped Fleet</div>
+    </div>
+    <div class="strip-img">
+      <img src="/images/bryant-real-10.jpg" alt="Christopher and Matthew Bryant — your local HVAC team" loading="lazy" style="object-position: 50% 16%;" onerror="this.src='/images/bryant-hvac-hero.webp'" />
+      <div class="strip-caption">Your Local Team</div>
+    </div>
+  </div>
+
+  <section style="padding:32px 0 64px;">
+    <div class="inner" style="max-width:800px;">
       <div style="margin-bottom:32px;"><TrustBar /></div>
       <h2 style="font-size:1.8rem; color:var(--navy); margin-bottom:16px;">Why Customers Choose Bryant</h2>
       <ul style="font-size:1.05rem; line-height:2; padding-left:20px;">

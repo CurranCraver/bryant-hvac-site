@@ -2,38 +2,289 @@
 export interface Props {
   heading?: string;
 }
-const { heading = "Request Service" } = Astro.props;
+const { heading = 'Request Service' } = Astro.props;
 ---
-<section style="background:var(--bg); padding:64px 0;">
-  <div class="inner" style="max-width:600px;">
-    <h2 style="font-size:2rem; color:var(--navy); margin-bottom:24px;">{heading}</h2>
-    <form action="/.netlify/functions/contact" method="POST"
-          style="display:flex; flex-direction:column; gap:16px;">
-      <input name="name" type="text" required placeholder="Your name"
-             style="padding:12px 16px; border:1px solid #ccc; border-radius:4px; font-size:16px; font-family:inherit;" />
-      <input name="phone" type="tel" required placeholder="Phone number"
-             style="padding:12px 16px; border:1px solid #ccc; border-radius:4px; font-size:16px; font-family:inherit;" />
-      <input name="email" type="email" placeholder="Email (optional)"
-             style="padding:12px 16px; border:1px solid #ccc; border-radius:4px; font-size:16px; font-family:inherit;" />
-      <textarea name="message" placeholder="What do you need?" rows="4"
-                style="padding:12px 16px; border:1px solid #ccc; border-radius:4px; font-size:16px; font-family:inherit; resize:vertical;"></textarea>
-      <label style="display:flex; gap:10px; align-items:flex-start; font-size:13px; color:#555; cursor:pointer; line-height:1.5;">
-        <input name="sms_consent" type="checkbox" style="margin-top:2px; flex-shrink:0;" />
-        By checking this box, I consent to receive non-marketing text messages from Bryant Heating &amp; Cooling of the Piedmont, LLC about service requests and follow-up communications. Message frequency varies, message &amp; data rates may apply. Text HELP for assistance, reply STOP to opt out.
-      </label>
-      <label style="display:flex; gap:10px; align-items:flex-start; font-size:13px; color:#555; cursor:pointer; line-height:1.5;">
-        <input name="marketing_consent" type="checkbox" style="margin-top:2px; flex-shrink:0;" />
-        By checking this box, I consent to receive marketing text messages about special offers, discounts, and service updates from Bryant Heating &amp; Cooling of the Piedmont, LLC at the phone number provided. Message frequency may vary. Message &amp; data rates may apply. Text HELP for assistance, reply STOP to opt out.
-      </label>
-      <p style="font-size:12px; color:#555; margin-top:-8px;">
-        By submitting this form you agree to our
-        <a href="/privacy-policy">Privacy Policy</a> and
-        <a href="/terms-of-service">Terms of Service</a>.
-      </p>
-      <button type="submit"
-              style="background:var(--red); color:#fff; padding:14px 32px; border:none; border-radius:4px; font-size:1.2rem; font-weight:700; font-family:'Barlow Condensed',sans-serif; cursor:pointer; letter-spacing:0.5px;">
-        Request Service →
-      </button>
-    </form>
+<section class="form-section">
+  <div class="inner form-layout">
+
+    <!-- FORM (GHL native iframe — unchanged) -->
+    <div class="form-main">
+      <h2 class="form-heading">{heading}</h2>
+      <p class="form-sub">Send this and a real person gets back to you fast &mdash; usually the same day. Need someone now? Call and we&rsquo;ll pick up.</p>
+      <iframe
+        src="https://links.kinplex.net/widget/form/aCg4ieD85v4ysqXPUFIj"
+        style="width:100%; min-height:700px; border:none; border-radius:8px; display:block;"
+        id="inline-aCg4ieD85v4ysqXPUFIj"
+        data-layout="{'id':'INLINE'}"
+        data-trigger-type="alwaysShow"
+        data-trigger-value=""
+        data-activation-type="alwaysActivated"
+        data-activation-value=""
+        data-deactivation-type="neverDeactivate"
+        data-deactivation-value=""
+        data-form-name="Bryant Service Request Form"
+        data-height="700"
+        data-layout-iframe-id="inline-aCg4ieD85v4ysqXPUFIj"
+        data-form-id="aCg4ieD85v4ysqXPUFIj"
+        title="Bryant Service Request Form">
+      </iframe>
+    </div>
+
+    <!-- CONVERSION RAIL (sticky on desktop, stacks under form on mobile) -->
+    <aside class="form-rail">
+
+      <!-- Card 1 — social proof (static stars + lazy GHL review widget) -->
+      <div class="rail-card">
+        <p class="rail-title">Five-Star Rated on Google</p>
+        <div class="rail-rating">
+          <span class="rail-rating-num">5.0</span>
+          <span class="rail-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        </div>
+        <blockquote class="rail-review">
+          <p class="rail-review-text">&ldquo;No one wants to spend money on HVAC &mdash; so if we have to, it&rsquo;s nice to work with a family-friendly small business that cares about its customers.&rdquo;</p>
+          <cite class="rail-review-author">&mdash; Jane G., Monroe NC</cite>
+        </blockquote>
+        <a href="https://g.page/r/CbkQHzskFUz-EBM/review" target="_blank" rel="noopener" class="rail-reviews-link">Read our Google reviews &rarr;</a>
+      </div>
+
+      <!-- Card 2 — what happens next (placeholder copy; Copy Agent refines) -->
+      <div class="rail-card">
+        <p class="rail-title">What Happens Next</p>
+        <ol class="next-steps">
+          <li><span class="ns-num">1</span><span class="ns-text">You call or send this &mdash; a real person picks up, not a machine.</span></li>
+          <li><span class="ns-num">2</span><span class="ns-text">We set a time that works for you, same day when we can.</span></li>
+          <li><span class="ns-num">3</span><span class="ns-text">A tech shows up on time, finds the problem, and prices it before any work.</span></li>
+        </ol>
+      </div>
+
+      <!-- Card 3 — call fallback -->
+      <a href="tel:+19802807570" class="rail-promo">
+        <span class="rail-promo-eyebrow">Rather Talk Now?</span>
+        <span class="rail-promo-title">We Answer<br />Every Call</span>
+        <span class="rail-pill">
+          Call (980) 280-7570
+          <span class="pill-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </span>
+        </span>
+      </a>
+
+    </aside>
   </div>
 </section>
+
+<style>
+  .form-section { background: var(--bg); padding: 64px 0; }
+  .form-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: 44px;
+    align-items: start;
+  }
+  .form-main { min-width: 0; }
+
+  /* Heading — matches locked section-heading treatment (Anton, accent underline) */
+  .form-heading {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(1.8rem, 3.4vw, 2.4rem);
+    color: var(--navy);
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    line-height: 1.05;
+    margin-bottom: 14px;
+  }
+  .form-heading::after {
+    content: '';
+    display: block;
+    width: 56px;
+    height: 3px;
+    margin: 14px 0 0;
+    background: linear-gradient(90deg, var(--navy), var(--blue));
+    border-radius: 2px;
+  }
+  .form-sub {
+    font-family: var(--font-body);
+    font-size: 0.97rem;
+    color: #5a6675;
+    line-height: 1.6;
+    margin-bottom: 26px;
+    max-width: 540px;
+  }
+
+  /* ─── RAIL ───────────────────────────────────────────── */
+  .form-rail {
+    position: sticky;
+    top: 96px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .rail-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 14px 36px rgba(27,58,92,0.12);
+    padding: 22px 20px 24px;
+  }
+  .rail-title {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 0.92rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--navy);
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .rail-stars {
+    color: #FFC107;
+    font-size: 1.05rem;
+    letter-spacing: 3px;
+    text-align: center;
+  }
+  /* Hardcoded compact reviews card (replaces the wide GHL widget — faster, fits the rail) */
+  .rail-rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 16px;
+  }
+  .rail-rating-num {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 2.4rem;
+    color: var(--navy);
+    line-height: 0.9;
+    letter-spacing: 0.5px;
+  }
+  .rail-review { margin: 0 0 14px; }
+  .rail-review-text {
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 0.88rem;
+    line-height: 1.55;
+    color: #44515f;
+    margin-bottom: 8px;
+  }
+  .rail-review-author {
+    display: block;
+    font-family: var(--font-heading);
+    font-style: normal;
+    font-weight: 700;
+    font-size: 0.76rem;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .rail-reviews-link {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: var(--red);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .rail-reviews-link:hover { text-decoration: underline; }
+
+  /* What happens next */
+  .next-steps { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
+  .next-steps li { display: flex; align-items: flex-start; gap: 12px; }
+  .ns-num {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--blue) 100%);
+    color: #fff;
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 0.82rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ns-text {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #44515f;
+    padding-top: 3px;
+  }
+
+  /* Call fallback card */
+  .rail-promo {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 14px 36px rgba(27,58,92,0.12);
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: center;
+    padding: 26px 20px;
+    color: #fff;
+    text-decoration: none;
+  }
+  .rail-promo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(27,58,92,0.55) 0%, rgba(27,58,92,0.93) 100%),
+      url('/images/bryant-hvac-hero.webp') center/cover no-repeat;
+    z-index: 0;
+  }
+  .rail-promo > * { position: relative; z-index: 1; }
+  .rail-promo:hover { text-decoration: none; }
+  .rail-promo-eyebrow {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 8px;
+  }
+  .rail-promo-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.55rem;
+    line-height: 1.04;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 18px;
+  }
+  .rail-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--red);
+    color: #fff;
+    padding: 11px 14px 11px 22px;
+    border-radius: 100px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .rail-promo:hover .rail-pill { background: #a81919; transform: translateY(-2px); }
+  .rail-pill .pill-arrow {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: rgba(255,255,255,0.22);
+    transition: transform 0.2s;
+  }
+  .rail-promo:hover .rail-pill .pill-arrow { transform: translateX(3px); }
+
+  /* Mobile: single column — form first, rail stacks below */
+  @media (max-width: 900px) {
+    .form-layout { grid-template-columns: 1fr; gap: 32px; }
+    .form-rail { position: static; }
+  }
+</style>
+
+<!-- GHL form embed script (native, unchanged) -->
+<script src="https://links.kinplex.net/js/form_embed.js" is:inline></script>

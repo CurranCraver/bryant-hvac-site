@@ -10,6 +10,8 @@ const pageSchema = z.object({
   service: z.string().optional(),
   canonical: z.string().url(),
   lastmod: z.string(),
+  faqs: z.array(z.object({ q: z.string(), a: z.string() })).optional(),
+  relatedServices: z.array(z.object({ title: z.string(), href: z.string() })).optional(),
 });
 
 const pages = defineCollection({

@@ -8,23 +8,1064 @@ export interface Props {
   description: string;
   canonical: string;
   city?: string;
+  state?: string;
   lastmod?: string;
+  faqs?: { q: string; a: string }[];
 }
-const { title, description, canonical, city = 'Monroe' } = Astro.props;
+const { title, description, canonical, city = 'Monroe', faqs } = Astro.props;
 
-const citySchema = {
-  "@context": "https://schema.org",
-  "@type": "LocalBusiness",
+const citySlug = city.toLowerCase().replace(/\s+/g, '-');
+
+// City-hub service navigation — keyword-rich anchors per internal-linking SOP
+const CITY_SERVICES = [
+  { title: "AC Repair", href: `/ac-repair-${citySlug}-nc` },
+  { title: "Furnace Repair", href: `/furnace-repair-${citySlug}-nc` },
+  { title: "Heat Pump Service", href: `/heat-pump-service-${citySlug}-nc` },
+  { title: "HVAC Installation", href: `/hvac-installation-${citySlug}-nc` },
+  { title: "HVAC Maintenance", href: `/hvac-maintenance-${citySlug}-nc` },
+];
+
+const cityAddress = {
+  "@type": "PostalAddress",
+  "streetAddress": "4710 Indian Trail Fairview Rd",
+  "addressLocality": "Indian Trail",
+  "addressRegion": "NC",
+  "postalCode": "28079",
+  "addressCountry": "US"
+};
+
+const cityBusinessSchema = {
+  "@type": "HVACBusiness",
   "name": "Bryant Heating & Cooling",
   "description": description,
   "telephone": "(980) 280-7570",
+  "address": cityAddress,
   "areaServed": { "@type": "City", "name": city, "addressRegion": "NC" }
 };
+
+// Service node — city hub represents the umbrella HVAC service + its offer catalog
+const cityServiceSchema = {
+  "@type": "Service",
+  "serviceType": "HVAC Service",
+  "name": `HVAC Service in ${city}, NC`,
+  "provider": {
+    "@type": "HVACBusiness",
+    "name": "Bryant Heating & Cooling",
+    "telephone": "(980) 280-7570",
+    "address": cityAddress
+  },
+  "areaServed": { "@type": "City", "name": city, "addressRegion": "NC" },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": `HVAC Services in ${city}, NC`,
+    "itemListElement": CITY_SERVICES.map(s => ({
+      "@type": "Offer",
+      "itemOffered": { "@type": "Service", "name": s.title }
+    }))
+  }
+};
+
+const citySchema = {
+  "@context": "https://schema.org",
+  "@graph": [cityBusinessSchema, cityServiceSchema]
+};
+
+const faqSchema = faqs && faqs.length > 0 ? {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map(item => ({
+    "@type": "Question",
+    "name": item.q,
+    "acceptedAnswer": { "@type": "Answer", "text": item.a }
+  }))
+} : undefined;
+
+// Other city hubs — sidebar internal linking (current city filtered out)
+const CITY_HUBS = [
+  { name: "Monroe", href: "/cities/hvac-monroe-nc" },
+  { name: "Indian Trail", href: "/cities/hvac-indian-trail-nc" },
+  { name: "Waxhaw", href: "/cities/hvac-waxhaw-nc" },
+];
+const nearbyCities = CITY_HUBS.filter(c => c.name.toLowerCase() !== city.toLowerCase());
 ---
-<Base title={title} description={description} canonical={canonical} schema={citySchema}>
-  <div class="inner" style="padding-top:32px;"><TrustBar /></div>
-  <article class="inner" style="padding:48px 24px; max-width:860px;">
-    <slot />
-  </article>
-  <ContactForm heading={`HVAC Service in ${city}, NC`} />
+<style>
+  /* ─── HERO ─────────────────────────────────────────── */
+  .hero {
+    background:
+      linear-gradient(rgba(27,58,92,0.83), rgba(27,58,92,0.90)),
+      url('/images/bryant-hvac-hero.webp') center/cover no-repeat;
+    min-height: 520px;
+    display: flex;
+    align-items: center;
+    padding: 80px 0 64px;
+  }
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2.6rem, 5.4vw, 4rem);
+    font-weight: 400;
+    color: #fff;
+    line-height: 1.04;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    max-width: 760px;
+  }
+  .hero-sub {
+    font-size: 1.05rem;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 28px;
+    max-width: 540px;
+    line-height: 1.6;
+  }
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 32px;
+    align-items: center;
+  }
+  @keyframes pulse-ring {
+    0%   { box-shadow: 0 0 0 0 rgba(196,30,30,0.55); }
+    70%  { box-shadow: 0 0 0 14px rgba(196,30,30,0); }
+    100% { box-shadow: 0 0 0 0 rgba(196,30,30,0); }
+  }
+  .btn-pulse { animation: pulse-ring 2.2s ease-out infinite; }
+  .btn-red {
+    background: var(--red);
+    color: #fff;
+    padding: 15px 30px;
+    border-radius: 4px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    display: inline-block;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-red:hover { background: #a81919; transform: translateY(-2px); }
+  .btn-outline-white {
+    border: 2px solid rgba(255,255,255,0.65);
+    color: #fff;
+    padding: 13px 28px;
+    border-radius: 4px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    display: inline-block;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+  }
+  .btn-outline-white:hover { border-color: #fff; background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+  .hero-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+  }
+  .hero-badge {
+    color: rgba(255,255,255,0.8);
+    font-size: 0.82rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  /* Static star proof — lightweight HTML, no JS, above the fold */
+  .hero-rating {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin-bottom: 22px;
+  }
+  .hero-stars { color: #FFC107; font-size: 1rem; letter-spacing: 2px; }
+  .hero-rating-text {
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 0.3px;
+  }
+
+  /* ─── BREADCRUMB ───────────────────────────────────── */
+  .breadcrumb {
+    background: #fff;
+    border-bottom: 1px solid #E5E7EB;
+    padding: 10px 0;
+  }
+  .breadcrumb nav {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.82rem;
+    color: #888;
+    flex-wrap: wrap;
+  }
+  .breadcrumb a { color: var(--navy); text-decoration: none; font-weight: 500; }
+  .breadcrumb a:hover { color: var(--red); }
+  .bc-sep { color: #ccc; }
+  .bc-current { color: #555; }
+
+  /* ─── TRUST BAR ────────────────────────────────────── */
+  .trust-bar-wrap {
+    background: #fff;
+    border-bottom: 1px solid #E5E7EB;
+  }
+
+  /* ─── PHOTO STRIP (visual break for the text run) ──── */
+  .photo-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    height: 260px;
+    overflow: hidden;
+  }
+  .strip-img { position: relative; overflow: hidden; }
+  .strip-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  .strip-img:hover img { transform: scale(1.07); }
+  .strip-caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(27,58,92,0.88) 0%, transparent 70%);
+    padding: 24px 16px 14px;
+    font-family: var(--font-heading);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  @media (max-width: 640px) {
+    .photo-strip { height: 180px; }
+    .strip-caption { font-size: 0.75rem; padding: 16px 10px 10px; }
+  }
+  @media (max-width: 520px) {
+    .photo-strip { grid-template-columns: 1fr; height: auto; }
+    .strip-img { height: 200px; }
+  }
+
+  /* ─── PROOF BLOCK (type-led, specific) ─────────────── */
+  .proof { background: var(--bg); padding: 60px 0; }
+  .proof-eyebrow {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 26px;
+  }
+  .proof-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px 24px;
+  }
+  .proof-item { padding-left: 16px; border-left: 3px solid var(--blue); }
+  .proof-key {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.1rem, 3.4vw, 3rem);
+    color: var(--navy);
+    line-height: 0.95;
+    letter-spacing: 0.5px;
+  }
+  .proof-label {
+    display: block;
+    margin-top: 10px;
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: #44515f;
+    line-height: 1.45;
+  }
+  @media (max-width: 760px) { .proof-grid { grid-template-columns: 1fr 1fr; gap: 28px 22px; } }
+  @media (max-width: 430px) { .proof-grid { grid-template-columns: 1fr; } }
+
+  /* ─── SHARED CENTERED HEADING + ACCENT UNDERLINE ───── */
+  .sec-heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 3.4vw, 2.4rem);
+    font-weight: 400;
+    color: var(--navy);
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .sec-heading::after {
+    content: '';
+    display: block;
+    width: 56px;
+    height: 3px;
+    margin: 14px auto 0;
+    background: linear-gradient(90deg, var(--navy), var(--blue));
+    border-radius: 2px;
+  }
+
+  /* ─── CITY SERVICES (stacked buttons in floating card) ─ */
+  .services-section { background: #fff; padding: 64px 0; }
+  .stack-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 26px 26px 28px;
+    max-width: 680px;
+    margin: 0 auto;
+    box-shadow: 0 14px 36px rgba(27,58,92,0.12);
+  }
+  .stack-list { display: flex; flex-direction: column; gap: 11px; }
+  .stack-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    background: var(--navy);
+    color: #fff;
+    padding: 16px 22px;
+    border-radius: 6px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.02rem;
+    letter-spacing: 0.3px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .stack-btn:hover { background: #24507e; transform: translateY(-1px); text-decoration: none; }
+  .stack-btn .chev { transition: transform 0.2s; }
+  .stack-btn:hover .chev { transform: translateX(4px); }
+  .stack-btn.red { background: var(--red); }
+  .stack-btn.red:hover { background: #a81919; }
+
+  /* ─── SPLIT PANEL ──────────────────────────────────── */
+  .split-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 420px;
+    background: #fff;
+  }
+  .split-img { overflow: hidden; }
+  .split-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
+  .split-img:hover img { transform: scale(1.04); }
+  .split-text {
+    padding: 60px 52px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #fff;
+  }
+  .split-eyebrow {
+    font-family: var(--font-heading);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--red);
+    margin-bottom: 10px;
+  }
+  .split-heading {
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 3vw, 2.3rem);
+    font-weight: 400;
+    color: var(--navy);
+    line-height: 1.08;
+    letter-spacing: 0.3px;
+    margin-bottom: 16px;
+  }
+  .split-body {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #3a4651;
+    margin-bottom: 24px;
+  }
+  .split-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .split-list li {
+    font-family: var(--font-body);
+    font-size: 0.93rem;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .split-list li svg { color: var(--red); flex-shrink: 0; }
+  .btn-red-sm {
+    background: var(--red);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    align-self: flex-start;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-red-sm:hover { background: #a81919; transform: translateY(-2px); }
+  .btn-red-sm svg { transition: transform 0.2s; }
+  .btn-red-sm:hover svg { transform: translateX(3px); }
+
+  /* ─── TESTIMONIALS (gradient band) ─────────────────── */
+  .testimonials {
+    background: linear-gradient(160deg, var(--navy) 0%, #2c557f 100%);
+    padding: 64px 0;
+  }
+  .t-heading { color: #fff; }
+  .t-heading::after { background: linear-gradient(90deg, #fff, var(--blue)); }
+  .t-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .t-card {
+    background: rgba(255,255,255,0.09);
+    border-radius: 10px;
+    padding: 28px;
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+  .t-stars { color: #FFC107; font-size: 13px; letter-spacing: 2px; margin-bottom: 12px; }
+  .t-text {
+    font-family: var(--font-heading);
+    font-size: 0.96rem;
+    font-weight: 500;
+    line-height: 1.66;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+  .t-author {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ─── BODY CONTENT (two-column: prose + sticky sidebar) ─── */
+  .content-section { background: #fff; padding: 56px 0; }
+  .content-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 48px;
+    align-items: start;
+  }
+  .content-main { min-width: 0; }
+  .content-aside {
+    position: sticky;
+    top: 96px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .aside-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 14px 36px rgba(27,58,92,0.12);
+    padding: 22px 20px 24px;
+  }
+  .aside-title {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: 0.92rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--navy);
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .aside-promo {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 14px 36px rgba(27,58,92,0.12);
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    text-align: center;
+    padding: 26px 20px;
+    color: #fff;
+    text-decoration: none;
+  }
+  .aside-promo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(rgba(27,58,92,0.50) 0%, rgba(27,58,92,0.92) 100%),
+      url('/images/bryant-hvac-hero.webp') center/cover no-repeat;
+    z-index: 0;
+  }
+  .aside-promo > * { position: relative; z-index: 1; }
+  .aside-promo-eyebrow {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 8px;
+  }
+  .aside-promo-title {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.55rem;
+    line-height: 1.04;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 18px;
+  }
+  .aside-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--red);
+    color: #fff;
+    padding: 11px 14px 11px 22px;
+    border-radius: 100px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .aside-promo:hover .aside-pill { background: #a81919; transform: translateY(-2px); }
+  .aside-pill .pill-arrow {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: rgba(255,255,255,0.22);
+    transition: transform 0.2s;
+  }
+  .aside-promo:hover .aside-pill .pill-arrow { transform: translateX(3px); }
+  @media (max-width: 900px) {
+    .content-layout { grid-template-columns: 1fr; gap: 36px; }
+    .content-aside { position: static; }
+  }
+
+  /* ─── FAQ ACCORDION ────────────────────────────────── */
+  .faq-section { background: var(--bg); padding: 64px 0; }
+  .faq-list { max-width: 760px; margin: 0 auto; }
+  .faq-item {
+    border-bottom: 1px solid #D1D5DB;
+    box-shadow: inset 0 0 0 0 var(--blue);
+    transition: background 0.2s, box-shadow 0.2s;
+  }
+  .faq-item:first-child { border-top: 1px solid #D1D5DB; }
+  .faq-item:has(.faq-q[aria-expanded="true"]) {
+    background: rgba(91,138,181,0.08);
+    box-shadow: inset 3px 0 0 0 var(--blue);
+  }
+  .faq-q {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 18px 14px;
+    text-align: left;
+    font-family: var(--font-heading);
+    font-size: 1.02rem;
+    font-weight: 700;
+    color: var(--navy);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    line-height: 1.4;
+    transition: color 0.15s;
+  }
+  .faq-q:hover { color: var(--red); }
+  .faq-q[aria-expanded="true"] { color: var(--red); }
+  .faq-arrow { flex-shrink: 0; color: var(--blue); transition: transform 0.2s ease, color 0.15s; }
+  .faq-q[aria-expanded="true"] .faq-arrow { transform: rotate(180deg); color: var(--red); }
+  .faq-a { padding: 0 14px 20px; }
+  .faq-a p { font-family: var(--font-body); font-size: 0.97rem; line-height: 1.75; color: #444; margin: 0; }
+
+  /* ─── PILL BUTTON + CTA BAND ───────────────────────── */
+  .btn-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--red);
+    color: #fff;
+    padding: 11px 14px 11px 28px;
+    border-radius: 100px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  }
+  .btn-pill:hover { background: #a81919; transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.22); }
+  .btn-pill .pill-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.22);
+    transition: transform 0.2s, background 0.2s;
+  }
+  .btn-pill:hover .pill-arrow { transform: translateX(3px); background: rgba(255,255,255,0.32); }
+  .inline-cta {
+    background: linear-gradient(162deg, #122538 0%, var(--navy) 42%, #3c6ea4 100%);
+    padding: 58px 0;
+    text-align: center;
+  }
+  .inline-cta h2 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4.4vw, 2.8rem);
+    font-weight: 400;
+    color: #fff;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .inline-cta p { font-size: 1rem; color: rgba(255,255,255,0.85); margin-bottom: 20px; }
+  .cta-phone {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 5.6vw, 3.4rem);
+    font-weight: 400;
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+    line-height: 1;
+    transition: opacity 0.2s;
+  }
+  .cta-phone:hover { opacity: 0.85; }
+
+  /* ─── STICKY BAR ───────────────────────────────────── */
+  .sticky-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: rgba(27,58,92,0.97);
+    backdrop-filter: blur(8px);
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    z-index: 9999;
+  }
+  .sticky-bar.visible { transform: translateY(0); }
+  .sticky-bar p { color: #fff; font-size: 15px; font-weight: 600; margin: 0; }
+  .sticky-bar a {
+    background: var(--red);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 14px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .sticky-bar a:hover { background: #a81919; }
+
+  /* ─── RESPONSIVE ───────────────────────────────────── */
+  @media (max-width: 768px) {
+    .split-panel { grid-template-columns: 1fr; }
+    .split-img { min-height: 260px; }
+    .split-text { padding: 40px 24px; }
+  }
+  @media (max-width: 640px) {
+    .hero { min-height: 440px; padding: 60px 0 48px; }
+    .hero-ctas { flex-direction: column; }
+    .btn-red, .btn-outline-white { text-align: center; display: block; }
+    .sticky-bar { flex-direction: column; padding: 16px 24px; text-align: center; }
+    .sticky-bar a { width: 100%; text-align: center; display: block; padding: 12px; }
+  }
+</style>
+
+<style is:global>
+  .city-prose h2 {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--navy);
+    margin: 36px 0 10px;
+    padding-top: 6px;
+  }
+  .city-prose h2:first-child { margin-top: 0; }
+  .city-prose h3 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 24px 0 8px;
+  }
+  .city-prose p {
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    line-height: 1.68;
+    color: #2b3640;
+    margin-bottom: 16px;
+  }
+  .city-prose > p:first-of-type {
+    font-size: 1.22rem;
+    line-height: 1.55;
+    color: #14222f;
+    font-weight: 500;
+    margin-bottom: 22px;
+  }
+  .city-prose ul {
+    list-style: none;
+    font-family: var(--font-body);
+    padding-left: 0;
+    margin-bottom: 16px;
+  }
+  .city-prose li {
+    position: relative;
+    padding-left: 26px;
+    margin-bottom: 10px;
+    font-size: 1.04rem;
+    line-height: 1.5;
+    color: #2b3640;
+  }
+  .city-prose ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.5em;
+    width: 9px;
+    height: 9px;
+    background: var(--red);
+    border-radius: 2px;
+  }
+  .city-prose ol { font-family: var(--font-body); padding-left: 20px; margin-bottom: 16px; }
+  .city-prose strong { color: var(--navy); font-weight: 700; }
+  .city-prose a { color: var(--red); }
+  .city-prose hr { border: none; border-top: 1px solid #E5E7EB; margin: 28px 0; }
+  .city-prose em { font-style: italic; color: #666; }
+</style>
+
+<Base title={title} description={description} canonical={canonical} schema={citySchema} faqSchema={faqSchema}>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="inner">
+      <h1>HVAC Service in {city}, NC</h1>
+      <p class="hero-sub">
+        AC repair, furnace service, and full HVAC installation in {city}.
+        Licensed, local, and available 24/7 for emergency breakdowns.
+      </p>
+      <div class="hero-ctas">
+        <a href="tel:+19802807570" class="btn-red btn-pulse">Call (980) 280-7570</a>
+        <a href="#contact-section" class="btn-outline-white">Get Free Estimate</a>
+      </div>
+      <div class="hero-rating">
+        <span class="hero-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+        <span class="hero-rating-text">Five-Star Rated on Google</span>
+      </div>
+      <div class="hero-badges">
+        <span class="hero-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          NC License #18740
+        </span>
+        <span class="hero-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          BBB Accredited
+        </span>
+        <span class="hero-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          24/7 Emergency Service
+        </span>
+        <span class="hero-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          No Diagnostic Fee
+        </span>
+        <span class="hero-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+          Veterans &amp; Seniors Save 10%
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <div class="inner">
+      <nav aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span class="bc-sep">›</span>
+        <a href="/service-areas">Service Areas</a>
+        <span class="bc-sep">›</span>
+        <span class="bc-current">{city}, NC</span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- TRUST BAR -->
+  <div class="trust-bar-wrap">
+    <div class="inner"><TrustBar /></div>
+  </div>
+
+  <!-- PROOF BLOCK -->
+  <section class="proof">
+    <div class="inner">
+      <p class="proof-eyebrow">Why {city} Calls Bryant</p>
+      <div class="proof-grid">
+        <div class="proof-item">
+          <span class="proof-key">24/7</span>
+          <span class="proof-label">We pick up &mdash; nights, weekends, and holidays.</span>
+        </div>
+        <div class="proof-item">
+          <span class="proof-key">10+ yrs</span>
+          <span class="proof-label">Serving Union County homeowners, season after season.</span>
+        </div>
+        <div class="proof-item">
+          <span class="proof-key">$0</span>
+          <span class="proof-label">To show up. No diagnostic fee, ever.</span>
+        </div>
+        <div class="proof-item">
+          <span class="proof-key">2 &amp; 10</span>
+          <span class="proof-label">Year labor &amp; parts warranty on the work.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHOTO STRIP — visual break between proof and services -->
+  <div class="photo-strip">
+    <div class="strip-img">
+      <img src="/images/bryant-real-10.jpg" alt="Christopher and Matthew Bryant — HVAC techs serving the Monroe area" loading="lazy" style="object-position: 50% 16%;" onerror="this.src='/images/bryant-hvac-hero.webp'" />
+      <div class="strip-caption">Your Local Team</div>
+    </div>
+    <div class="strip-img">
+      <img src="/images/bryant-real-18.jpg" alt="Bryant Heating and Cooling branded service trailer" loading="lazy" style="object-position: 50% 24%;" onerror="this.src='/images/bryant-hvac-hero.webp'" />
+      <div class="strip-caption">The Coolest Guys You Know</div>
+    </div>
+    <div class="strip-img">
+      <img src="/images/bryant-real-22.jpg" alt="Bryant HVAC — trust and quality service" loading="lazy" style="object-position: 50% 30%;" onerror="this.src='/images/bryant-hvac-hero.webp'" />
+      <div class="strip-caption">Done Right Every Time</div>
+    </div>
+  </div>
+
+  <!-- CITY SERVICES (stacked buttons) -->
+  <section class="services-section">
+    <div class="inner">
+      <h2 class="sec-heading">HVAC Services in {city}, NC</h2>
+      <div class="stack-card">
+        <div class="stack-list">
+          {CITY_SERVICES.map(s => (
+            <a href={s.href} class="stack-btn">
+              {s.title}
+              <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+            </a>
+          ))}
+          <a href="#contact-section" class="stack-btn red">
+            Get a Free Estimate
+            <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPLIT PANEL — real branded truck + local trust -->
+  <section class="split-panel">
+    <div class="split-img">
+      <img src="/images/bryant-real-01.jpg" alt={`Christopher Bryant — local HVAC tech serving ${city}, NC`} loading="lazy" style="object-position: 50% 0%;" onerror="this.src='/images/bryant-hvac-hero.webp'" />
+    </div>
+    <div class="split-text">
+      <p class="split-eyebrow">Proudly Serving {city}</p>
+      <h2 class="split-heading">Local HVAC &mdash; Not a Call Center, Not a Franchise</h2>
+      <p class="split-body">
+        We&rsquo;re based in Indian Trail and every tech we send to your door is someone we vouch for personally. Call us at 10pm because your AC just quit and you reach a real person &mdash; not a dispatch queue.
+      </p>
+      <ul class="split-list">
+        <li>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          Serving {city} and all of Union County
+        </li>
+        <li>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          Same-day appointments available
+        </li>
+        <li>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          Flat pricing before any work starts
+        </li>
+        <li>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+          10% discount for veterans &amp; seniors
+        </li>
+      </ul>
+      <a href="tel:+19802807570" class="btn-red-sm">
+        Call (980) 280-7570
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials">
+    <div class="inner">
+      <h2 class="sec-heading t-heading">What Homeowners Near {city} Are Saying</h2>
+      <div class="t-grid">
+        <div class="t-card">
+          <div class="t-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="t-text">"Christopher always provides exceptional service. Despite harsh weather, he arrived promptly, remained professional, and demonstrated extensive knowledge throughout the repair. He clearly explained the issue and our options and made sure everything was running properly before leaving."</p>
+          <div class="t-author">&mdash; Haley Maske &nbsp;|&nbsp; Union County, NC</div>
+        </div>
+        <div class="t-card">
+          <div class="t-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          <p class="t-text">"Christopher and his team were fabulous from beginning to end! No one wants to spend money on HVAC &mdash; so if we have to, it is nice to work with a family-friendly small business that cares about its customers."</p>
+          <div class="t-author">&mdash; Jane Gardner &nbsp;|&nbsp; Monroe, NC</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BODY CONTENT (two-column: prose + sticky sidebar) -->
+  <section class="content-section">
+    <div class="inner content-layout">
+      <div class="content-main city-prose">
+        <slot />
+      </div>
+      <aside class="content-aside">
+        {nearbyCities.length > 0 && (
+          <div class="aside-card">
+            <p class="aside-title">Nearby Service Areas</p>
+            <div class="stack-list">
+              {nearbyCities.map(c => (
+                <a href={c.href} class="stack-btn">
+                  {c.name}, NC
+                  <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+              ))}
+              <a href="#contact-section" class="stack-btn red">
+                Get a Free Estimate
+                <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+              </a>
+            </div>
+          </div>
+        )}
+        <a href="tel:+19802807570" class="aside-promo">
+          <span class="aside-promo-eyebrow">We Answer Every Call</span>
+          <span class="aside-promo-title">24/7 Emergency<br />Service</span>
+          <span class="aside-pill">
+            Call (980) 280-7570
+            <span class="pill-arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </span>
+          </span>
+        </a>
+      </aside>
+    </div>
+  </section>
+
+  <!-- FAQ ACCORDION -->
+  {faqs && faqs.length > 0 && (
+    <section class="faq-section">
+      <div class="inner">
+        <h2 class="sec-heading">Frequently Asked Questions</h2>
+        <div class="faq-list">
+          {faqs.map((item, i) => (
+            <div class="faq-item">
+              <button class="faq-q" aria-expanded="false" aria-controls={`faq-a-${i}`}>
+                {item.q}
+                <svg class="faq-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-a" id={`faq-a-${i}`} hidden>
+                <p>{item.a}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+  <script is:inline>
+    (function() {
+      document.querySelectorAll('.faq-q').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var expanded = this.getAttribute('aria-expanded') === 'true';
+          var answer = document.getElementById(this.getAttribute('aria-controls'));
+          this.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+          if (answer) answer.hidden = expanded;
+        });
+      });
+    })();
+  </script>
+
+  <!-- CTA BAND -->
+  <section class="inline-cta">
+    <div class="inner">
+      <h2>Serving {city} Around the Clock</h2>
+      <p>We answer every call &mdash; nights, weekends, and holidays.</p>
+      <a href="tel:+19802807570" class="cta-phone">(980) 280-7570</a>
+      <a href="#contact-section" class="btn-pill">
+        Get Free Estimate
+        <span class="pill-arrow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <!-- CONTACT FORM -->
+  <div id="contact-section">
+    <ContactForm heading={`Schedule HVAC Service in ${city}, NC`} />
+  </div>
+
+  <!-- STICKY BAR -->
+  <div class="sticky-bar" id="stickyBar">
+    <p>Need a tech in {city}? We answer 24/7 &mdash; same day when we can.</p>
+    <a href="tel:+19802807570">Call (980) 280-7570</a>
+  </div>
+  <script is:inline>
+    (function() {
+      var bar = document.getElementById('stickyBar');
+      var formSection = document.getElementById('contact-section');
+      if (!bar) return;
+      function updateBar() {
+        var threshold = window.innerWidth <= 640 ? 150 : 300;
+        var pastFold = window.scrollY > threshold;
+        var atForm = false;
+        if (formSection) {
+          var formTop = formSection.getBoundingClientRect().top + window.scrollY;
+          atForm = (window.scrollY + window.innerHeight) > (formTop + 80) && window.scrollY < (formTop + formSection.offsetHeight);
+        }
+        bar.classList.toggle('visible', pastFold && !atForm);
+      }
+      window.addEventListener('scroll', updateBar, { passive: true });
+      var barLink = bar.querySelector('a');
+      if (barLink) barLink.addEventListener('click', function() { bar.classList.remove('visible'); });
+      updateBar();
+    })();
+  </script>
+
 </Base>

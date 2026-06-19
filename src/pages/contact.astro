@@ -7,17 +7,75 @@ import ContactForm from '../components/ContactForm.astro';
   description="Contact Bryant HVAC in Monroe NC. Call (980) 280-7570 for AC repair, furnace service, HVAC installation, and emergency service."
   canonical="https://bryanthvacpros.com/contact"
 >
-  <section style="padding:64px 0;">
+<style>
+  .photo-strip {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    height: 260px;
+    overflow: hidden;
+  }
+  .strip-img {
+    position: relative;
+    overflow: hidden;
+  }
+  .strip-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: 50% 50%;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  .strip-img:hover img { transform: scale(1.07); }
+  .strip-caption {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(to top, rgba(27,58,92,0.88) 0%, transparent 70%);
+    padding: 24px 16px 14px;
+    font-family: var(--font-heading);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  @media (max-width: 640px) {
+    .photo-strip { height: 180px; }
+    .strip-caption { font-size: 0.75rem; padding: 16px 10px 10px; }
+  }
+  @media (max-width: 520px) {
+    .photo-strip { grid-template-columns: 1fr; height: auto; }
+    .strip-img { height: 200px; }
+  }
+</style>
+
+  <section style="padding:64px 0 0;">
     <div class="inner">
       <h1 style="font-size:2.8rem; color:var(--navy); margin-bottom:32px;">Contact Us</h1>
-      <div style="margin-bottom:48px;">
+      <div style="margin-bottom:40px;">
         <p style="font-size:1.1rem; margin-bottom:12px;"><strong>Phone:</strong> <a href="tel:+19802807570">(980) 280-7570</a></p>
         <p style="font-size:1.1rem; margin-bottom:12px;"><strong>Email:</strong> <a href="mailto:bryanthvacpro@gmail.com">bryanthvacpro@gmail.com</a></p>
-        <p style="font-size:1.1rem; margin-bottom:12px;"><strong>Address:</strong> 7923 Morgan Mill Rd, Monroe, NC 28110</p>
+        <p style="font-size:1.1rem; margin-bottom:12px;"><strong>Address:</strong> 4710 Indian Trail Fairview Rd, Indian Trail, NC 28079</p>
         <p style="font-size:1.1rem; margin-bottom:12px;"><strong>Hours:</strong> 24/7 Emergency Service Available</p>
         <p style="font-size:1.1rem;"><strong>License:</strong> NC Contractor #18740</p>
       </div>
     </div>
   </section>
+
+  <!-- PHOTO STRIP -->
+  <div class="photo-strip">
+    <div class="strip-img">
+      <img src="/images/bryant-real-01.jpg" alt="Christopher Bryant — owner of Bryant Heating and Cooling" loading="lazy" style="object-position: 50% 0%;" onerror="this.src='/images/bryant-hvac-hero.webp'" />
+      <div class="strip-caption">Christopher Bryant</div>
+    </div>
+    <div class="strip-img">
+      <img src="/images/bryant-real-10.jpg" alt="Christopher and Matthew — your local Bryant HVAC team" loading="lazy" style="object-position: 50% 16%;" onerror="this.src='/images/bryant-hvac-hero.webp'" />
+      <div class="strip-caption">Your Local Team</div>
+    </div>
+    <div class="strip-img">
+      <img src="/images/bryant-real-18.jpg" alt="Bryant Heating and Cooling — always ready to serve Monroe NC" loading="lazy" style="object-position: 50% 24%;" onerror="this.src='/images/bryant-hvac-hero.webp'" />
+      <div class="strip-caption">Always Ready</div>
+    </div>
+  </div>
+
   <ContactForm heading="Send Us a Message" />
 </Base>

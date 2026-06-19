@@ -4,9 +4,10 @@ export interface Props {
   description: string;
   canonical: string;
   schema?: object;
+  faqSchema?: object;
   preloadImage?: string;
 }
-const { title, description, canonical, schema, preloadImage } = Astro.props;
+const { title, description, canonical, schema, faqSchema, preloadImage } = Astro.props;
 
 const localBusinessSchema = {
   "@context": "https://schema.org",
@@ -17,10 +18,10 @@ const localBusinessSchema = {
   "telephone": "(980) 280-7570",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "7923 Morgan Mill Rd",
-    "addressLocality": "Monroe",
+    "streetAddress": "4710 Indian Trail Fairview Rd",
+    "addressLocality": "Indian Trail",
     "addressRegion": "NC",
-    "postalCode": "28110",
+    "postalCode": "28079",
     "addressCountry": "US"
   },
   "hasCredential": "NC Contractor License #18740",
@@ -45,12 +46,21 @@ const localBusinessSchema = {
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;600;700&display=swap" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;600;700&display=swap" media="print" onload="this.media='all'" />
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;600;700&display=swap" /></noscript>
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" /></noscript>
   {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
   <script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)} />
   {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+  {faqSchema && <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />}
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-D1BK9WJ8NB"></script>
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-D1BK9WJ8NB');
+  </script>
   <style is:global>
     :root {
       --red: #C41E1E;
@@ -58,31 +68,197 @@ const localBusinessSchema = {
       --navy: #1B3A5C;
       --white: #FFFFFF;
       --bg: #F0F4F8;
+      --font-display: 'Anton', 'Arial Narrow', sans-serif;
+      --font-heading: 'Inter', sans-serif;
+      --font-body:    'Inter', sans-serif;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Barlow', sans-serif; font-size: 16px; color: #111; background: var(--white); }
-    h1, h2, h3 { font-family: 'Barlow Condensed', sans-serif; font-weight: 800; }
+    body { font-family: var(--font-body); font-size: 16px; color: #111; background: var(--white); }
+    h1 { font-family: var(--font-display); font-weight: 400; letter-spacing: 0.3px; }
+    h2, h3 { font-family: var(--font-heading); font-weight: 700; }  /* Anton only on big display headings via explicit classes — never small text */
     a { color: var(--red); text-decoration: none; }
     a:hover { text-decoration: underline; }
     .inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
   </style>
+  <style>
+    /* ─── FROZEN 2-TIER NAV ─────────────────────────────── */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    /* Utility strip */
+    .util-bar {
+      background: var(--navy);
+      color: rgba(255,255,255,0.85);
+      font-size: 0.8rem;
+      padding: 7px 0;
+    }
+    .util-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .util-left { font-weight: 500; letter-spacing: 0.2px; }
+    .util-right {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: 600;
+    }
+    .util-right svg { color: var(--red); }
+    .util-right a { color: #fff; font-weight: 700; }
+    .util-right a:hover { text-decoration: underline; }
+    /* Main bar */
+    .nav-bar {
+      background: #fff;
+      border-bottom: 1px solid #E5E7EB;
+      transition: box-shadow 0.25s ease;
+    }
+    .site-header.scrolled .nav-bar { box-shadow: 0 4px 18px rgba(0,0,0,0.10); }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 10px 24px;
+    }
+    .nav-logo { display: inline-flex; align-items: center; flex-shrink: 0; }
+    .nav-logo img { height: 50px; width: auto; display: block; }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+    }
+    .nav-links > a {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--navy);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: color 0.15s;
+    }
+    .nav-links > a:hover { color: var(--red); text-decoration: none; }
+    .nav-reviews {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      line-height: 1.05;
+      gap: 1px;
+    }
+    .nav-reviews:hover { text-decoration: none; }
+    .nav-reviews .stars { color: #FFC107; font-size: 0.8rem; letter-spacing: 1.5px; }
+    .nav-reviews .reviews-label {
+      font-family: var(--font-body);
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: #6B7280;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+    /* Specificity must beat `.nav-links > a` (navy) or the CTA text renders navy-on-red */
+    .nav-links > a.nav-book { color: #fff; }
+    .nav-book {
+      background: var(--red);
+      color: #fff;
+      padding: 11px 22px;
+      border-radius: 4px;
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 0.92rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .nav-book:hover { background: #a81919; transform: translateY(-2px); text-decoration: none; }
+    /* Mobile toggle */
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--navy);
+      cursor: pointer;
+      padding: 6px;
+      line-height: 0;
+    }
+    @media (max-width: 860px) {
+      .nav-toggle { display: inline-flex; }
+      .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0; right: 0;
+        background: #fff;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 8px 0;
+        border-bottom: 1px solid #E5E7EB;
+        box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        pointer-events: none;
+        transition: max-height 0.28s ease, opacity 0.2s ease;
+      }
+      .nav-bar { position: relative; }
+      .nav-links.open {
+        max-height: 420px;
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .nav-links > a {
+        padding: 13px 24px;
+        border-bottom: 1px solid #F0F4F8;
+      }
+      .nav-reviews {
+        flex-direction: row;
+        gap: 8px;
+        padding: 13px 24px;
+        justify-content: flex-start;
+        border-bottom: 1px solid #F0F4F8;
+      }
+      .nav-book {
+        margin: 12px 24px 6px;
+        text-align: center;
+      }
+    }
+  </style>
 </head>
 <body>
   <slot name="header">
-    <header style="background:var(--navy); padding:16px 0;">
-      <div class="inner" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
-        <a href="/">
-          <img src="/images/bryant-hvac-logo.webp" alt="Bryant Heating & Cooling" style="height:48px; width:auto;" />
-        </a>
-        <nav style="display:flex; gap:24px; align-items:center; flex-wrap:wrap;">
-          <a href="/service-areas" style="color:#fff; font-weight:600;">Service Areas</a>
-          <a href="/about" style="color:#fff; font-weight:600;">About</a>
-          <a href="/contact" style="color:#fff; font-weight:600;">Contact</a>
-          <a href="tel:+19802807570"
-             style="background:var(--red); color:#fff; padding:10px 20px; border-radius:4px; font-weight:700; white-space:nowrap; flex-shrink:0;">
-            (980) 280-7570
+    <header class="site-header" id="siteHeader">
+      <div class="util-bar">
+        <div class="inner util-inner">
+          <span class="util-left">Serving Monroe &amp; All of Union County, NC</span>
+          <span class="util-right">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            24/7 Emergency &mdash; <a href="tel:+19802807570">(980) 280-7570</a>
+          </span>
+        </div>
+      </div>
+      <div class="nav-bar">
+        <div class="inner nav-inner">
+          <a href="/" class="nav-logo" aria-label="Bryant Heating &amp; Cooling home">
+            <img src="/images/bryant-hvac-logo.webp" alt="Bryant Heating & Cooling" />
           </a>
-        </nav>
+          <nav class="nav-links" id="navLinks" aria-label="Primary">
+            <a href="/service-areas">Service Areas</a>
+            <a href="/about">About</a>
+            <a href="/contact">Contact</a>
+            <a href="https://g.page/r/CbkQHzskFUz-EBM/review" class="nav-reviews" target="_blank" rel="noopener" aria-label="Read our Google reviews">
+              <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+              <span class="reviews-label">Google Reviews</span>
+            </a>
+            <a href="/contact" class="nav-book">Book Service</a>
+          </nav>
+          <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+        </div>
       </div>
     </header>
   </slot>
@@ -93,7 +269,7 @@ const localBusinessSchema = {
     <footer style="background:var(--navy); color:#fff; padding:48px 0; margin-top:64px;">
       <div class="inner">
         <p style="font-weight:700; font-size:18px;">Bryant Heating & Cooling</p>
-        <p style="margin-top:8px;">7923 Morgan Mill Rd, Monroe, NC 28110</p>
+        <p style="margin-top:8px;">4710 Indian Trail Fairview Rd, Indian Trail, NC 28079</p>
         <p><a href="tel:+19802807570" style="color:#fff;">(980) 280-7570</a></p>
         <p style="margin-top:8px; font-size:14px; opacity:0.7;">NC Contractor License #18740 · Licensed & Insured · BBB Accredited</p>
         <p style="margin-top:16px; font-size:13px; opacity:0.6;">
@@ -103,5 +279,26 @@ const localBusinessSchema = {
       </div>
     </footer>
   </slot>
+
+  <script is:inline>
+    (function() {
+      var header = document.getElementById('siteHeader');
+      var toggle = document.getElementById('navToggle');
+      var links = document.getElementById('navLinks');
+      if (toggle && links) {
+        toggle.addEventListener('click', function() {
+          var open = links.classList.toggle('open');
+          toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+      }
+      if (header) {
+        var onScroll = function() {
+          header.classList.toggle('scrolled', window.scrollY > 4);
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      }
+    })();
+  </script>
 </body>
 </html>
