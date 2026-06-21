@@ -1,11 +1,11 @@
----
+﻿---
 import Base from '../layouts/Base.astro';
 import ContactForm from '../components/ContactForm.astro';
 ---
 <Base
   title="Contact Bryant Heating & Cooling | Monroe NC HVAC"
   description="Contact Bryant HVAC in Monroe NC. Call (980) 280-7570 for AC repair, furnace service, HVAC installation, and emergency service."
-  canonical="https://bryanthvacpros.com/contact"
+  canonical="https://bryanthvacpros.com/contact/"
 >
 <style>
   .photo-strip {
@@ -64,18 +64,32 @@ import ContactForm from '../components/ContactForm.astro';
   <!-- PHOTO STRIP -->
   <div class="photo-strip">
     <div class="strip-img">
-      <img src="/images/bryant-real-01.jpg" alt="Christopher Bryant — owner of Bryant Heating and Cooling" loading="lazy" style="object-position: 50% 0%;" onerror="this.src='/images/bryant-hvac-hero.webp'" />
+      <img src="/images/bryant-real-01.jpg" alt="Christopher Bryant — owner of Bryant Heating and Cooling" loading="lazy" style="object-position: 50% 18%;" onerror="this.src='/images/bryant-hvac-hero.webp'" />
       <div class="strip-caption">Christopher Bryant</div>
     </div>
     <div class="strip-img">
-      <img src="/images/bryant-real-10.jpg" alt="Christopher and Matthew — your local Bryant HVAC team" loading="lazy" style="object-position: 50% 16%;" onerror="this.src='/images/bryant-hvac-hero.webp'" />
+      <img src="/images/bryant-real-08.jpg" alt="Christopher and Matthew — your local Bryant HVAC team" loading="lazy" style="object-position: 38% 25%;" onerror="this.src='/images/bryant-hvac-hero.webp'" />
       <div class="strip-caption">Your Local Team</div>
     </div>
     <div class="strip-img">
-      <img src="/images/bryant-real-18.jpg" alt="Bryant Heating and Cooling — always ready to serve Monroe NC" loading="lazy" style="object-position: 50% 24%;" onerror="this.src='/images/bryant-hvac-hero.webp'" />
+      <img src="/images/bryant-real-18.jpg" alt="Bryant Heating and Cooling — always ready to serve Monroe NC" loading="lazy" style="object-position: 90% 15%;" onerror="this.src='/images/bryant-hvac-hero.webp'" />
       <div class="strip-caption">Always Ready</div>
     </div>
   </div>
 
   <ContactForm heading="Send Us a Message" />
+
+  <!-- MAP -->
+  <section style="padding:0;">
+    <iframe
+      src="https://maps.google.com/maps?q=4710+Indian+Trail+Fairview+Rd+Indian+Trail+NC+28079&output=embed"
+      width="100%"
+      height="400"
+      style="border:0; display:block;"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      title="Bryant Heating &amp; Cooling — location map">
+    </iframe>
+  </section>
 </Base>

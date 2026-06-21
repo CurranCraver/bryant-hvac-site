@@ -6,7 +6,7 @@ import ContactForm from '../components/ContactForm.astro';
   title="Bryant Heating &amp; Cooling | HVAC Indian Trail, Monroe &amp; Charlotte NC"
   description="Family-owned HVAC for Union County &amp; greater Charlotte. AC repair, heating, heat pumps, installation &amp; maintenance — licensed #18740, 24/7, no diagnostic fee. Call (980) 280-7570."
   canonical="https://bryanthvacpros.com"
-  preloadImage="/images/bryant-hvac-hero.webp"
+  preloadImage="/images/bryant-real-12.jpg"
 >
   <style>
     :root {
@@ -28,9 +28,9 @@ import ContactForm from '../components/ContactForm.astro';
       display: flex;
       align-items: center;
       padding: 76px 0 84px;
-      background: linear-gradient(118deg, rgba(27,58,92,0.90) 0%, rgba(27,58,92,0.62) 55%, rgba(91,138,181,0.45) 100%), url('/images/bryant-hvac-hero.webp') center/cover no-repeat;
+      background: linear-gradient(to right, rgba(27,58,92,0.93) 0%, rgba(27,58,92,0.93) 38%, rgba(27,58,92,0.60) 52%, rgba(27,58,92,0.08) 65%, rgba(27,58,92,0.00) 100%), url('/images/bryant-real-12.jpg') 70% 18%/cover no-repeat;
     }
-    .hero-inner { max-width: 760px; }
+    .hero-inner { max-width: 640px; }
     .hero h1 { font-size: clamp(38px, 5.6vw, 66px); color: var(--white); }
     .hero-sub { font-family: var(--font-body); font-size: clamp(16px, 1.5vw, 19px); color: rgba(255,255,255,0.88); margin-top: 18px; line-height: 1.6; max-width: 620px; }
     .hero-ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 28px; }
@@ -58,6 +58,18 @@ import ContactForm from '../components/ContactForm.astro';
     .hero-stars { display: flex; align-items: center; gap: 9px; margin-top: 22px; }
     .hero-stars .stars { color: #FFC107; font-size: 1rem; letter-spacing: 2px; }
     .hero-stars span.txt { font-family: var(--font-heading); font-size: 0.85rem; font-weight: 700; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 0.5px; }
+    .hero-watermark {
+      position: absolute;
+      right: 5%;
+      bottom: -40px;
+      height: 290px;
+      width: auto;
+      opacity: 0.11;
+      filter: grayscale(1) brightness(10);
+      pointer-events: none;
+      user-select: none;
+    }
+    @media (max-width: 860px) { .hero-watermark { display: none; } }
 
     /* ─── ACTION CARDS (overlap hero bottom) ───────────── */
     /* Cards live in their OWN section — no negative-margin overlap (a card row taller than the
@@ -117,7 +129,7 @@ import ContactForm from '../components/ContactForm.astro';
     }
     .why-band::before {
       content: ''; position: absolute; inset: 0; z-index: 0;
-      background: linear-gradient(100deg, rgba(27,58,92,0.94) 0%, rgba(27,58,92,0.78) 45%, rgba(27,58,92,0.30) 100%), url('/images/hvac-panel-2.jpg') 50% 20%/cover no-repeat;
+      background: linear-gradient(100deg, rgba(27,58,92,0.94) 0%, rgba(27,58,92,0.78) 45%, rgba(27,58,92,0.30) 100%), url('/images/bryant-real-2014.jpg') 60% 30%/cover no-repeat;
     }
     .why-content { position: relative; z-index: 1; padding: 56px 48px; max-width: 640px; }
     .why-content h2 { font-size: clamp(30px, 4.2vw, 52px); color: #fff; }
@@ -149,7 +161,7 @@ import ContactForm from '../components/ContactForm.astro';
 
     /* ─── PROOF BLOCK ──────────────────────────────────── */
     .proof { background: var(--light-bg); padding: 64px 0; margin-top: 48px; }
-    .proof-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+    .proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
     .proof-item { padding-left: 18px; border-left: 3px solid var(--blue); }
     .proof-key { font-family: var(--font-display); font-weight: 400; font-size: 2.6rem; line-height: 1; letter-spacing: 0.5px; color: var(--navy); }
     .proof-line { font-family: var(--font-body); font-size: 0.96rem; line-height: 1.5; color: #3a444f; margin-top: 10px; }
@@ -187,7 +199,7 @@ import ContactForm from '../components/ContactForm.astro';
     /* ─── RESPONSIVE ───────────────────────────────────── */
     @media (max-width: 980px) {
       .action-grid, .svc-grid { grid-template-columns: repeat(2, 1fr); }
-      .proof-grid { grid-template-columns: repeat(2, 1fr); gap: 22px 28px; }
+      .proof-grid { grid-template-columns: repeat(2, 1fr); gap: 22px 28px; max-width: 640px; margin: 0 auto; }
     }
     @media (max-width: 600px) {
       .hero { padding: 56px 0 60px; }
@@ -203,7 +215,7 @@ import ContactForm from '../components/ContactForm.astro';
   <!-- ═══ HERO ═══ -->
   <section class="hero" id="hero">
     <div class="inner hero-inner">
-      <h1 class="anton">Honest Heating &amp; Cooling<br />From Indian Trail to Charlotte</h1>
+      <h1 class="anton">Honest Heating &amp; Cooling<br />For the Greater Charlotte Area</h1>
       <p class="hero-sub">Family-owned HVAC repair, installation, and maintenance for Union County and the greater Charlotte metro. Licensed, insured, and on call 24/7 &mdash; with a flat price before we touch anything.</p>
       <div class="hero-ctas">
         <a href="/contact" class="btn-pill">Get a Free Estimate
@@ -219,6 +231,7 @@ import ContactForm from '../components/ContactForm.astro';
         <span class="txt">Five-Star Rated on Google</span>
       </div>
     </div>
+    <img class="hero-watermark" src="/images/bryant-logo-transparent.png" alt="" aria-hidden="true" />
   </section>
 
   <!-- ═══ ACTION CARDS ═══ -->
@@ -304,10 +317,10 @@ import ContactForm from '../components/ContactForm.astro';
     <div class="split-text">
       <p class="split-eyebrow">Honest HVAC, Done Right</p>
       <h2 class="split-heading">Expert Heating &amp; Cooling For Your Home</h2>
-      <p class="split-lead">We keep homes comfortable year-round across Indian Trail, Monroe, Waxhaw, and the greater Charlotte metro &mdash; AC repair, furnace and heat pump service, new installs, and seasonal maintenance.</p>
+      <p class="split-lead">We keep homes comfortable year-round across the Greater Charlotte area and surrounding communities &mdash; AC repair, furnace and heat pump service, new installs, and seasonal maintenance.</p>
       <ul class="split-list">
         <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Licensed (NC #18740), insured, and on call 24/7</li>
-        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>No diagnostic fee &mdash; a flat price before any work starts</li>
+        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Free estimates on replacements &mdash; a flat price before any repair starts</li>
         <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Straight repair-or-replace advice, with the numbers in front of you</li>
         <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Financing through Hearth so a breakdown doesn&rsquo;t have to wait</li>
       </ul>
@@ -327,10 +340,6 @@ import ContactForm from '../components/ContactForm.astro';
       <div class="proof-item">
         <div class="proof-key anton">10+ yrs</div>
         <p class="proof-line">In the trade serving local Union County homeowners.</p>
-      </div>
-      <div class="proof-item">
-        <div class="proof-key anton">$0</div>
-        <p class="proof-line">No diagnostic fee, ever &mdash; and a flat price before any work.</p>
       </div>
       <div class="proof-item">
         <div class="proof-key anton">2 &amp; 10</div>
@@ -376,6 +385,25 @@ import ContactForm from '../components/ContactForm.astro';
         <span class="cta-call">or call <a href="tel:+19802807570">(980) 280-7570</a></span>
       </div>
     </div>
+  </section>
+
+  <!-- ═══ MAP ═══ -->
+  <section style="padding:64px 0 0; background:var(--light-bg);">
+    <div class="inner" style="text-align:center; margin-bottom:32px;">
+      <p class="section-eyebrow">Find Us</p>
+      <h2 class="anton" style="font-size:2rem; color:var(--navy);">Indian Trail, NC</h2>
+      <p style="font-family:var(--font-body); color:var(--muted); margin-top:8px;">4710 Indian Trail Fairview Rd, Indian Trail, NC 28079</p>
+    </div>
+    <iframe
+      src="https://maps.google.com/maps?q=4710+Indian+Trail+Fairview+Rd+Indian+Trail+NC+28079&output=embed"
+      width="100%"
+      height="400"
+      style="border:0; display:block;"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      title="Bryant Heating &amp; Cooling — Indian Trail NC location map">
+    </iframe>
   </section>
 
   <!-- ═══ FOOTER ═══ -->
